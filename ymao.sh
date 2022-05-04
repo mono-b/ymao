@@ -33,16 +33,16 @@ main() {
 
 help_text() {
     cat<<EOF
- By default ymao runs semi-interactively, where the user only inserts an artist and album. The script will try to search
- the correct playlist/album and download it automatically.
+ By default ymao prompts for an artist and album and then tries to search for the correct playlist/album
+ and downloads it automatically.
 
  With [-i] as an option, the user needs to also introduce the playlist's ID (ex: playlist?list=PLImd94xC...)
- If running the script semi-interactively and failing, try again with [-i] as an option. This option runs
- effectively every time, as far as I have tested.
+ This option runs effectively every time, as far as I have tested.
 
  Extra options:
      -c convert files to ogg
      -t download album art
+     -i prompts for playlist
 EOF
 }
 
