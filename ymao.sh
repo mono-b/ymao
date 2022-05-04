@@ -48,28 +48,19 @@ EOF
 
 search_playlist() {
     query2=$(echo "$artist $album"+album | tr ' ' '+')
-    html_code=$(curl -s "https://yewtu.be/search?q=${query2}&page=1&date=none&type=playlist&duration=none&sort=relevance" | \
-                sed -n '/<a style="width/,/<\/body>/p')
-
-    unsorted_results=$(grep -Eoi "playlist\?list=.+[a-zA-Z0-9]|[0-9]+ videos|${album}.+" <<< $html_code | \
-                            sed \
-                            -e 's/<\/p>//' \
-                            -e 's/ videos$/ songs/' \
-                            -e 's/<\/b>//' \
-                            -e 's/ - Invidious<\/title>//' | \
-                            sed '/^[[:space:]]*$/d')
 
     query3=$(echo "$artist"/"$album" | tr ' ' '+')
+
     album_len=$(curl -s "https://www.last.fm/music/${query3}" | \
                     grep -Eo ' [0-9]+ tracks' | \
                     awk 'NR==1{print $1 " songs"}')
 
-    playlist=$(echo "$unsorted_results" | \
-               paste - -s -d'\t\t\n' | \
-               head -n3 | \
-               grep -E "${album_len}" | \
-               head -n1 | \
-               awk '{print $1}')
+    playlist=$(curl -s "https://yewtu.be/search?q=${query2}&page=1&date=none&type=playlist&duration=none&sort=relevance" | \
+                    grep -Eoi "playlist\?list=.+[a-zA-Z0-9]|[0-9]+ videos" | \
+                    sed 's/ videos$/ songs/g' | \
+                    paste - -s -d'\t\n' | \
+                    grep -E "${album_len}" | \
+                    awk 'NR==1 {print $1}')
 }
 
 get_album_art() {
