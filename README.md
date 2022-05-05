@@ -25,4 +25,5 @@ chmod +x ymao.sh
 
 - yt-dlp 
 - curl
-- jq
+- sed
+- awk

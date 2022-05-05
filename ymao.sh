@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# deps: "yt-dlp" "jq" "curl" "awk" "sed"
-
+# deps: "yt-dlp" "curl" "awk" "sed"
 
 ##############################################
 # Set your music dir "$HOME/path/to/music/dir"
@@ -18,9 +17,9 @@ main() {
     read -p "Artist: " artist
     read -p "Album: " album
     final_dir="$music_dir"/"$artist"/"$album"
-    artist_query=$(tr ' ' '+' <<< "$artist")
-    album_query=$(tr ' ' '+' <<< "$album")
-    mkdir "$music_dir"/"$artist"/ 2> /dev/null || mkdir "$final_dir"/ 2> /dev/null
+    artist_query=$(sed 's/[[:punct:]]//g;s/ /+/g' <<< "$artist")
+    album_query=$(sed 's/[[:punct:]]//g;s/ /+/g' <<< "$album")
+    mkdir "$final_dir"/ 2> /dev/null
     [[ ! -z $i_option ]] && read -p "Playlist's ID: " playlist || search_playlist
     yt-dlp -x --audio-format mp3 --add-metadata -o "$final_dir/%(title)s.%(ext)s" --yes-playlist "$yt_url"/"$playlist"
     [[ ! -z $t_option ]] && get_album_art
@@ -37,7 +36,7 @@ search_playlist() {
 
 get_album_art() {
     album_cover_url="https://itunes.apple.com/search?term=$artist_query+$album_query&media=music&entity=musicTrack"
-    curl -o "$final_dir"/AlbumArt.jpg "$(curl -s "$album_cover_url" | jq '.results[] | .artworkUrl60' | head -n1 | sed 's/^"//g;s/"$//g;s/60x60bb.jpg/600x600bb.jpg/g')"
+    curl -o "$final_dir"/AlbumArt.jpg "$(curl -s "$album_cover_url" | grep -o -m1 'https://is.*x30bb.jpg' | sed 's/30x30bb.jpg/600x600bb.jpg/')"
 }
 
 convert_ogg() {
@@ -76,6 +75,6 @@ done
 shift $((OPTIND-1))
 
 # Check dependencies and start
-check_deps "yt-dlp" "curl" "jq" "awk" "sed"
+check_deps "yt-dlp" "curl" "awk" "sed"
 
 main
