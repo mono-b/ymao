@@ -8,9 +8,6 @@
 # DO NOT ADD A '/' AT THE END OF IT
 music_dir=""
 
-# YT Var
-yt_link="https://www.youtube.com"
-
 [[ "$music_dir" == "" ]] && echo "EDIT THE SCRIPT AND ADD A MUSIC DIR!!" && exit 1
 
 # Functions

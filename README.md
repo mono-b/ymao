@@ -1,8 +1,8 @@
 # ymao
 
-A script to download music albums from Invidious (YT's frontend) and organize them in your music's 
-directory interactively. It adds metadata by default and can optionally download album art covers 
-and convert the audio files to `.ogg` for saving some space.
+A script to download music albums/playlists from Invidious (YT's frontend) and organizes them in your music's 
+directory. It adds metadata by default and can optionally download album art covers and convert the audio files 
+to `.ogg` for saving some space.
 
 !! IMPORTANT: YOU NEED TO ADD YOUR MUSIC DIR IN THE SCRIPT, OTHERWISE IT WON'T EXECUTE !!
 
@@ -17,7 +17,6 @@ chmod +x ymao.sh
 
 ```
 ./ymao.sh [OPTIONS]
-    -h show the help text
     -t download album cover
     -c convert files to .ogg
     -i prompts for playlist (playlist?list=PL...)
